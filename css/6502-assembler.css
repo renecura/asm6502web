@@ -1,0 +1,252 @@
+/* 6502 Assembler — interfaz moderna, minimalista y adaptable */
+
+:root {
+    color-scheme: light dark;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+
+    --bg: #f4f6fb;
+    --surface: #ffffff;
+    --surface-muted: #f0f2f8;
+    --text: #182033;
+    --text-muted: #68738a;
+    --border: #dce2ed;
+    --accent: #5268d9;
+    --accent-hover: #4055c2;
+    --accent-soft: #e9edff;
+    --danger: #b42336;
+    --danger-bg: #fff0f1;
+    --code-bg: #111827;
+    --code-text: #e5eaf5;
+    --shadow: 0 12px 32px rgb(30 42 75 / 7%);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #10131b;
+        --surface: #191e2a;
+        --surface-muted: #222938;
+        --text: #edf1fa;
+        --text-muted: #a0abc0;
+        --border: #30394b;
+        --accent: #91a0ff;
+        --accent-hover: #aab5ff;
+        --accent-soft: #292f4d;
+        --danger: #ff929d;
+        --danger-bg: #3a2029;
+        --code-bg: #0c1018;
+        --code-text: #e5eaf5;
+        --shadow: 0 12px 32px rgb(0 0 0 / 22%);
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: min(100% - 2rem, 72rem);
+    margin: clamp(1.5rem, 5vw, 4rem) auto;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.55;
+}
+
+h1 {
+    margin: 0 0 1.5rem;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.045em;
+    font-weight: 750;
+}
+
+h1::after {
+    content: "";
+    display: block;
+    width: 3rem;
+    height: 4px;
+    margin-top: 0.8rem;
+    border-radius: 99px;
+    background: var(--accent);
+}
+
+#code {
+    display: block;
+    width: 100%;
+    min-height: 16rem;
+    resize: vertical;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    outline: none;
+    color: var(--code-text);
+    background: var(--code-bg);
+    box-shadow: var(--shadow);
+    font: 0.94rem/1.7 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    tab-size: 4;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+#code:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent), var(--shadow);
+}
+
+#assemble {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.8rem;
+    margin: 1rem 0 1.5rem;
+    padding: 0.65rem 1.35rem;
+    border: 0;
+    border-radius: 9px;
+    color: #fff;
+    background: var(--accent);
+    font: inherit;
+    font-weight: 650;
+    cursor: pointer;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent);
+    transition: background 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+
+#assemble:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+}
+
+#assemble:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+#assemble:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    outline-offset: 3px;
+}
+
+#errors {
+    margin: 0 0 1.25rem;
+    padding: 0;
+    list-style: none;
+    color: var(--danger);
+    font: 0.88rem/1.5 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+#errors:not(:empty) {
+    padding: 0.9rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
+    border-radius: 10px;
+    background: var(--danger-bg);
+}
+
+#errors li + li {
+    margin-top: 0.4rem;
+}
+
+#output {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.assembly-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: var(--text);
+    font: 0.86rem/1.5 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    white-space: nowrap;
+}
+
+.assembly-table th,
+.assembly-table td {
+    padding: 0.7rem 0.85rem;
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.assembly-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    color: var(--text-muted);
+    background: var(--surface-muted);
+    font: 650 0.72rem/1.4 Inter, ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+}
+
+.assembly-table th:first-child {
+    border-top-left-radius: 11px;
+}
+
+.assembly-table th:last-child {
+    border-top-right-radius: 11px;
+}
+
+.assembly-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.assembly-table tbody tr:hover td {
+    background: var(--accent-soft);
+}
+
+.assembly-table td:first-child {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.assembly-table td[data-field="opcode"],
+.assembly-table td[data-field="args"],
+.assembly-table td[data-field="asm"] {
+    color: var(--accent);
+    font-weight: 650;
+}
+
+@media (max-width: 640px) {
+    body {
+        width: min(100% - 1.25rem, 72rem);
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    #code {
+        min-height: 13rem;
+        padding: 0.9rem;
+        font-size: 0.88rem;
+    }
+
+    #assemble {
+        width: 100%;
+        margin-top: 0.85rem;
+    }
+
+    .assembly-table {
+        font-size: 0.8rem;
+    }
+
+    .assembly-table th,
+    .assembly-table td {
+        padding: 0.6rem 0.7rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}

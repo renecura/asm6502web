@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>6502 Assembler</title>
+
+    <link rel="stylesheet" href="./css/6502-assembler.css">
+    
+</head>
+<body>
+    <h1>6502 Assembler</h1>
+
+    <textarea id="code" spellcheck="false">LDA #$02
+STA $02
+LDA #$34    ; Valor inmediato
+STA $0190
+LDA #300    ; Valor fuera de rango para el modo INM: 300
+LDA #$B6
+LDA %10100101 ; Probando el binario
+LDY #$00
+hola mundo  ; Instrucción inválida: hola mundo
+STA ($01),Y
+loop:   ; Defino una etiqueta
+INY
+STA ($01),Y
+BBB #$45  ;Instrucción desconocida: BBB
+LDA 15
+BCC loop
+INY $45 ; Modo ZP no válido para INY</textarea>
+
+    <button id="assemble" type="button">Ensamblar</button>
+
+    <ul id="errors"></ul>
+    <div id="output"></div>
+
+    <!-- Plantilla de la tabla: el thead define las columnas y la fila data-row se repite por instrucción -->
+    <template id="assembly-table-template">
+        <table class="assembly-table">
+            <thead>
+                <tr>
+                    <th>linea</th>
+                    <th>codigo</th>
+                    <th>mne</th>
+                    <th>modo</th>
+                    <th>opcode</th>
+                    <th>oper</th>
+                    <th>etiqueta</th>
+                    <th>dir</th>
+                    <th>máquina</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-row>
+                    <td data-field="lineno"></td>
+                    <td data-field="src"></td>
+                    <td data-field="nme"></td>
+                    <td data-field="mode"></td>
+                    <td data-field="opcode"></td>
+                    <td data-field="args"></td>
+                    <td data-field="label"></td>
+                    <td data-field="address"></td>
+                    <td data-field="asm"></td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
+    <script type="module">
+        import { assemble } from "./src/assembler.js";
+        import { renderAssemblyTable } from "./src/assembly-table.js";
+
+        const code = document.getElementById("code");
+        const output = document.getElementById("output");
+        const errors = document.getElementById("errors");
+
+        document.getElementById("assemble").addEventListener("click", () => {
+            const result = assemble(code.value);
+
+            output.replaceChildren(renderAssemblyTable(result));
+
+            // Las líneas con error no salen en la tabla: se listan aparte
+            errors.replaceChildren(
+                ...result
+                    .filter((entry) => entry.err)
+                    .map(({ lineno, src, err }) => {
+                        const li = document.createElement("li");
+                        li.textContent = `Línea ${lineno}: ${err} (${src})`;
+                        return li;
+                    })
+            );
+        });
+    </script>
+</body>
+</html>
