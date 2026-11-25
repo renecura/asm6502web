@@ -6,12 +6,18 @@
     <title>6502 Assembler</title>
 
     <link rel="stylesheet" href="./css/6502-assembler.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-code-editor@5/dist/layout.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-code-editor@5/dist/scrollbar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-code-editor@5/dist/themes/github-dark.css">
     
 </head>
 <body>
     <h1>6502 Assembler</h1>
 
-    <textarea id="code" spellcheck="false">LDA #$02
+    <div id="editor" style="height: 300px;"></div> 
+
+<!--     <textarea id="code" spellcheck="false">LDA #$02
 STA $02
 LDA #$34    ; Valor inmediato
 STA $0190
@@ -27,7 +33,7 @@ STA ($01),Y
 BBB #$45  ;Instrucción desconocida: BBB
 LDA 15
 BCC loop
-INY $45 ; Modo ZP no válido para INY</textarea>
+INY $45 ; Modo ZP no válido para INY</textarea> -->
 
     <button id="assemble" type="button">Ensamblar</button>
 
@@ -67,23 +73,51 @@ INY $45 ; Modo ZP no válido para INY</textarea>
     </template>
 
     <script type="module">
+        import { createEditor } from 'https://cdn.jsdelivr.net/npm/prism-code-editor@5/dist/index.js';
+        import 'https://cdn.jsdelivr.net/npm/prism-code-editor@5/dist/prism/languages/asm6502.js';
+
         import { assemble } from "./src/assembler.js";
         import { renderAssemblyTable } from "./src/assembly-table.js";
 
-        const code = document.getElementById("code");
+        const editor = createEditor('#editor', {
+            language: 'asm6502',
+            theme: 'github-dark',
+            class: 'code',
+            value: 'LDA #$02 \n\
+STA $02 \n\
+LDA #$34    ; Valor inmediato  \n\
+LDA #$34    ; Valor inmediato  \n\
+STA $0190 \n\
+LDA #300    ; Valor fuera de rango para el modo INM: 300 \n\
+LDA #$B6 \n\
+LDA %10100101 ; Probando el binario \n\
+LDY #$00 \n\
+hola mundo  ; Instrucción inválida: hola mundo \n\
+STA ($01),Y \n\
+loop:   ; Defino una etiqueta \n\
+INY \n\
+STA ($01),Y \n\
+BBB #$45  ;Instrucción desconocida: BBB \n\
+LDA 15 \n\
+BCC loop \n\
+INY $45 ; Modo ZP no válido para INY', 
+        });
+
         const output = document.getElementById("output");
-        const errors = document.getElementById("errors");
+        const errorslist = document.getElementById("errors");
 
         document.getElementById("assemble").addEventListener("click", () => {
-            const result = assemble(code.value);
+            const {result, errors} = assemble(editor.value);
 
             output.replaceChildren(renderAssemblyTable(result));
 
             // Las líneas con error no salen en la tabla: se listan aparte
-            errors.replaceChildren(
-                ...result
-                    .filter((entry) => entry.err)
+            errorslist.replaceChildren(
+                ...errors
                     .map(({ lineno, src, err }) => {
+
+                        editor.lines[lineno].classList.add('highlighted');
+
                         const li = document.createElement("li");
                         li.textContent = `Línea ${lineno}: ${err} (${src})`;
                         return li;

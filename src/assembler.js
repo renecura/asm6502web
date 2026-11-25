@@ -321,5 +321,10 @@ export function assemble(code, {origin = DEFAULT_ORIGIN} = {}) {
     const lines = preprocess(code);
     const {instructions, labels} = analyze(lines, origin);
 
-    return encode(instructions, labels);
+    const result = encode(instructions, labels);
+
+    return {
+        errors: result.filter((entry) => entry.err),
+        result: result.filter((entry) => !entry.err)
+    }
 }
