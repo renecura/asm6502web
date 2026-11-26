@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46666 135.46667"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.0431611"
+     inkscape:cx="250.68037"
+     inkscape:cy="242.05275"
+     inkscape:window-width="1920"
+     inkscape:window-height="1012"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <rect
+       x="34.510491"
+       y="73.814105"
+       width="430.42251"
+       height="357.56703"
+       id="rect236" />
+    <rect
+       x="34.510491"
+       y="73.814105"
+       width="430.42251"
+       height="357.56703"
+       id="rect244" />
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       transform="matrix(5.6494481,0,0,12.184977,-195.16851,-898.9036)"
+       id="text234"
+       style="font-weight:bold;font-size:10.6667px;line-height:0.8;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:justify;text-decoration-color:#000000;white-space:pre;shape-inside:url(#rect236);fill:#e25563;stroke-width:0.120527;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;stop-color:#000000"><tspan
+         x="34.509766"
+         y="81.219481"
+         id="tspan416"><tspan
+           style="font-family:'Bauhaus 93';-inkscape-font-specification:'Bauhaus 93 Bold'"
+           id="tspan414">6502</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(7.2488351,0,0,5.4890021,-252.68333,-312.90677)"
+       id="text242"
+       style="font-weight:bold;font-size:10.6667px;line-height:0.8;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:justify;text-decoration-color:#000000;white-space:pre;shape-inside:url(#rect244);fill:#e25563;stroke-width:0.158533;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;stop-color:#000000"><tspan
+         x="34.509766"
+         y="81.219481"
+         id="tspan420"><tspan
+           style="font-family:'Bauhaus 93';-inkscape-font-specification:'Bauhaus 93 Bold'"
+           id="tspan418">ASM</tspan></tspan></text>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+{
+  "name": "asm6502web",
+  "version": "1.0.0",
+  "description": "De momento es un prototipo para hacer análisis y chequeo de código.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "icons": "pwa-assets-generator"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "prism-code-editor": "^5.4.0"
+  },
+  "devDependencies": {
+    "@vite-pwa/assets-generator": "^2.0.0",
+    "vite": "^8.4.0",
+    "vite-plugin-pwa": "^1.1.0"
+  }
+}
