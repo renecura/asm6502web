@@ -137,7 +137,10 @@ function analyzeInstruction(lineno, src, text) {
         return {lineno, src, err: `Instrucción desconocida: ${nme}`};
     }
 
-    const {mode, operand} = parseOperand(nme, match[2]?.trim() ?? "");
+    const rawargs = match[2]?.trim() ?? "";
+    const {mode, operand} = parseOperand(nme, rawargs);
+
+    
 
     let finalMode = mode;
     let opcode = row[MODE_INDEX[finalMode]];
@@ -151,7 +154,7 @@ function analyzeInstruction(lineno, src, text) {
         return {lineno, src, err: `Modo ${mode} no válido para ${nme}`};
     }
 
-    return {lineno, src, nme, mode: finalMode, opcode, operand};
+    return {lineno, src, nme, rawargs, mode: finalMode, opcode, operand};
 }
 
 
@@ -288,7 +291,7 @@ function encode(instructions, labels) {
 
     return instructions.map((instruction) => {
 
-        const {lineno, src, nme, mode, opcode, address, label, err} = instruction;
+        const {lineno, src, nme, rawargs, mode, opcode, address, label, err} = instruction;
 
         if (err) return {lineno, src, err};
 
@@ -298,6 +301,7 @@ function encode(instructions, labels) {
             return {
                 lineno, src,
                 nme,
+                rawargs,
                 mode,
                 opcode,
                 address,

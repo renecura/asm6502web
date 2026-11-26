@@ -45,26 +45,22 @@ INY $45 ; Modo ZP no válido para INY</textarea> -->
         <table class="assembly-table">
             <thead>
                 <tr>
-                    <th>linea</th>
-                    <th>codigo</th>
-                    <th>mne</th>
-                    <th>modo</th>
-                    <th>opcode</th>
-                    <th>oper</th>
-                    <th>etiqueta</th>
-                    <th>dir</th>
-                    <th>máquina</th>
+                    <th data-col="lineno">#</th>
+                    <th data-col="label"></th>
+                    <th data-col="nme">codigo</th>
+                    <th data-col="rawargs"></th>
+                    <th data-col="mode">modo</th>
+                    <th data-col="address">dir</th>
+                    <th data-col="asm">memoria</th>
                 </tr>
             </thead>
             <tbody>
                 <tr data-row>
                     <td data-field="lineno"></td>
-                    <td data-field="src"></td>
-                    <td data-field="nme"></td>
-                    <td data-field="mode"></td>
-                    <td data-field="opcode"></td>
-                    <td data-field="args"></td>
                     <td data-field="label"></td>
+                    <td data-field="nme"></td>
+                    <td data-field="rawargs"></td>
+                    <td data-field="mode"></td>
                     <td data-field="address"></td>
                     <td data-field="asm"></td>
                 </tr>

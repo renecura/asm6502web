@@ -171,20 +171,42 @@ h1::after {
 }
 
 .assembly-table {
+    --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Consolas, "Liberation Mono", Menlo, monospace;
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
     color: var(--text);
-    font: 0.86rem/1.5 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-    white-space: nowrap;
+    font: 0.86rem/1.5 var(--font-mono);
 }
 
 .assembly-table th,
 .assembly-table td {
-    padding: 0.7rem 0.85rem;
+    width: 1%;                 /* cada columna mide lo que su contenido */
+    padding: 0.5rem 0.6rem;
     border: 0;
     border-bottom: 1px solid var(--border);
     text-align: left;
+    white-space: nowrap;
+}
+
+.assembly-table th[data-col="mode"],
+.assembly-table td[data-field="mode"] {
+    width: auto;
+}
+
+.assembly-table th[data-col="lineno"],
+.assembly-table td[data-field="lineno"],
+.assembly-table th[data-col="nme"],
+.assembly-table td[data-field="nme"],
+.assembly-table th[data-col="address"],
+.assembly-table td[data-field="address"] {
+    text-align: right;
+}
+
+.assembly-table th[data-col="nme"],
+.assembly-table td[data-field="nme"] {
+    width: 3ch;
+    padding-inline: 0.3rem;
 }
 
 .assembly-table th {
@@ -193,8 +215,8 @@ h1::after {
     z-index: 1;
     color: var(--text-muted);
     background: var(--surface-muted);
-    font: 650 0.72rem/1.4 Inter, ui-sans-serif, system-ui, sans-serif;
-    letter-spacing: 0.055em;
+    font: 650 0.68rem/1.3 Inter, ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
 }
 
@@ -219,12 +241,63 @@ h1::after {
     font-variant-numeric: tabular-nums;
 }
 
-.assembly-table td[data-field="opcode"],
-.assembly-table td[data-field="args"],
+.assembly-table td[data-field="nme"],
+.assembly-table td[data-field="rawargs"],
 .assembly-table td[data-field="asm"] {
     color: var(--accent);
     font-weight: 650;
 }
+
+
+
+.mode-pill {
+    --hue: 0;
+    --pill-bg: hsl(var(--hue) 85% 90%);
+    --pill-fg: hsl(var(--hue) 65% 28%);
+    --pill-border: hsl(var(--hue) 70% 75%);
+
+    display: inline-block;
+    padding: 0.1rem 0.65rem;
+    border: 1px solid var(--pill-border);
+    border-radius: 99px;
+    color: var(--pill-fg);
+    background: var(--pill-bg);
+    font-size: 0.8em;
+    font-weight: 650;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+/* modo desconocido (sin --hue): neutro */
+.mode-pill:not([style]) {
+    --pill-bg: var(--surface-muted);
+    --pill-fg: var(--text-muted);
+    --pill-border: var(--border);
+}
+
+@media (prefers-color-scheme: dark) {
+    .mode-pill {
+        --pill-bg: hsl(var(--hue) 45% 24%);
+        --pill-fg: hsl(var(--hue) 90% 85%);
+        --pill-border: hsl(var(--hue) 45% 38%);
+    }
+}
+
+#output {
+    container-type: inline-size;
+}
+
+/* por defecto: texto resumido ("Abs.") */
+.mode-pill .m-long {
+    display: none;
+}
+
+/* ancho amplio: texto completo ("Absoluto") */
+@container (min-width: 40rem) {
+    .mode-pill .m-mid  { display: none; }
+    .mode-pill .m-long { display: inline; }
+}
+
 
 @media (max-width: 640px) {
     body {
@@ -245,12 +318,22 @@ h1::after {
     }
 
     .assembly-table {
-        font-size: 0.8rem;
+        font-size: 0.72rem;
+        line-height: 1.35;
     }
 
     .assembly-table th,
     .assembly-table td {
-        padding: 0.6rem 0.7rem;
+        padding: 0.4rem 0.35rem;
+    }
+
+    .assembly-table th {
+        font-size: 0.6rem;
+        letter-spacing: 0;
+    }
+
+    #output {
+        border-radius: 10px;
     }
 }
 

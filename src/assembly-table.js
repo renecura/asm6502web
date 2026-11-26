@@ -18,6 +18,7 @@ export function toRow(entry) {
         lineno: entry.lineno,
         src: entry.src,
         nme: entry.nme,
+        rawargs: entry.rawargs,
         mode: entry.mode,
         opcode: hex(entry.opcode),
         args: hexBytes(entry.args),
@@ -25,6 +26,48 @@ export function toRow(entry) {
         address: hex(entry.address, 4),
         asm: hexBytes(entry.asm)
     };
+}
+
+
+// clave: [corto, completo, hue del arcoíris (0-360)]
+const MODE_INFO = {
+    IMPL: ["Impl.", "Implícito", 0],
+    INM: ["Inm.", "Inmediato", 40],
+    ZP: ["ZP", "Página cero", 60],
+    ZPX: ["ZP,X", "Página cero indexado por X", 80],
+    ZPY: ["ZP,Y", "Página cero indexado por Y", 100],
+    ABS: ["Abs.", "Absoluto", 180],
+    ABSX: ["Abs,X", "Absoluto indexado por X", 190],
+    ABSY: ["Abs,Y", "Absoluto indexado por Y", 200],
+    INDX: ["Ind. X", "Indirecto indexado por X", 260],
+    INDY: ["Ind. Y", "Indirecto indexado por Y", 280],
+    REL: ["Rel.", "Relativo", 320],
+};
+
+function renderModePill(raw) {
+    const code = String(raw ?? "").trim();
+    if (!code) return null;
+
+    const pill = document.createElement("span");
+    pill.className = "mode-pill";
+
+    const info = MODE_INFO[code.toUpperCase()];
+    if (!info) {                       // modo desconocido: cápsula neutra
+        pill.textContent = code;
+        return pill;
+    }
+
+    const [short, long, hue] = info;
+    pill.style.setProperty("--hue", hue);
+    pill.title = long;                 // tooltip con el nombre completo
+
+    for (const [cls, text] of [["m-mid", short], ["m-long", long]]) {
+        const span = document.createElement("span");
+        span.className = cls;
+        span.textContent = text;
+        pill.append(span);
+    }
+    return pill;
 }
 
 
@@ -50,6 +93,9 @@ export function renderAssemblyTable(
 
     prototype.remove();
 
+
+    console.log(instructions);
+
     instructions
         .filter((entry) => !entry.err)
         .forEach((entry) => {
@@ -61,8 +107,12 @@ export function renderAssemblyTable(
             tr.dataset.address = row.address;      // el código fuente / la ejecución
 
             for (const cell of tr.querySelectorAll("[data-field]")) {
-                // textContent (no innerHTML): el código fuente del usuario no se interpreta como HTML
-                cell.textContent = row[cell.dataset.field] ?? "";
+                if (cell.dataset.field === "mode") {
+                    const pill = renderModePill(row.mode);
+                    cell.replaceChildren(...(pill ? [pill] : []));
+                } else {
+                    cell.textContent = row[cell.dataset.field] ?? "";
+                }
             }
 
             tbody.append(tr);
