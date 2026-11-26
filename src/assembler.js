@@ -31,16 +31,6 @@ const OPERAND_SIZE = {
     REL: 1
 };
 
-// Si una instrucción no tiene variante de página cero (ej. LDA $10,Y),
-// se usa la absoluta equivalente.
-const ABSOLUTE_FALLBACK = {
-    ZP: "ABS",
-    ZPX: "ABSX",
-    ZPY: "ABSY"
-};
-
-const ACCUMULATOR_OPS = ["ASL", "LSR", "ROL", "ROR"];
-
 const DEFAULT_ORIGIN = 0x600;
 const MEMORY_SIZE = 0x10000;
 
@@ -145,10 +135,7 @@ function analyzeInstruction(lineno, src, text) {
     let finalMode = mode;
     let opcode = row[MODE_INDEX[finalMode]];
 
-    if ((opcode === null || opcode === undefined) && ABSOLUTE_FALLBACK[mode]) {
-        finalMode = ABSOLUTE_FALLBACK[mode];
-        opcode = row[MODE_INDEX[finalMode]];
-    }
+    
 
     if (opcode === null || opcode === undefined) {
         return {lineno, src, err: `Modo ${mode} no válido para ${nme}`};
@@ -164,9 +151,7 @@ function parseOperand(nme, text) {
 
     let match;
 
-    // Sin operando, o acumulador (ASL A). Solo ASL/LSR/ROL/ROR tienen modo
-    // acumulador; en el resto "A" puede ser una etiqueta (ej. BCC a).
-    if (!text || (ACCUMULATOR_OPS.includes(nme) && /^A$/i.test(text))) {
+    if (!text) {
         return {mode: "IMPL", operand: ""};
     }
 
